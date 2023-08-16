@@ -1,6 +1,6 @@
 "use client";
 
-import maplibregl from "maplibre-gl";
+import maplibregl, { GeoJSONSource } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import React, { useEffect, useRef } from "react";
 
@@ -42,6 +42,72 @@ const Map: React.FC<MapProps> = ({
 
   useEffect(() => {
     if (coordinateList.length > 0) {
+
+      var source = map.getSource('line') as GeoJSONSource;
+
+      if (source === undefined) {
+        var firstData = {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  coordinateList[0].toArray(),
+                ]
+              }
+            }
+          ]
+        };
+        map.addSource('line', { type: 'geojson', data: firstData });
+        map.addLayer({
+          'id': 'line',
+          'type': 'line',
+          'source': 'line',
+          'paint': {
+            'line-color': 'yellow',
+            'line-opacity': 0.75,
+            'line-width': 5
+          }
+        });
+      } else {
+        var updateData = {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "LineString",
+                "coordinates": 
+                  coordinateList.map(c => c.toArray()),
+                
+              }
+            }
+          ]
+        };
+
+        map.removeLayer('line');
+        map.removeSource('line');
+
+        map.addSource('line', { type: 'geojson', data: updateData });
+        map.addLayer({
+          'id': 'line',
+          'type': 'line',
+          'source': 'line',
+          'paint': {
+            'line-color': 'yellow',
+            'line-opacity': 0.75,
+            'line-width': 5
+          }
+        });
+      }
+
+
+
+
+
+
       console.log(coordinateList);
       console.log(coordinateList[coordinateList.length - 1]);
       const geojson = {
