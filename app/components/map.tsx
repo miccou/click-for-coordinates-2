@@ -3,6 +3,10 @@
 import maplibregl, { GeoJSONSource } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import React, { useEffect, useRef } from "react";
+import colors from 'tailwindcss/colors'
+
+
+
 
 interface MapProps {
   coordinateList?: maplibregl.LngLat[];
@@ -38,6 +42,7 @@ const Map: React.FC<MapProps> = ({
     map.on("click", (e) => {
       addCoordinateFunc(e.lngLat);
     });
+
   }, [mapContainer.current]);
 
   useEffect(() => {
@@ -66,9 +71,9 @@ const Map: React.FC<MapProps> = ({
           'type': 'line',
           'source': 'line',
           'paint': {
-            'line-color': 'yellow',
-            'line-opacity': 0.75,
-            'line-width': 5
+            'line-color': colors.blue[500],
+            'line-opacity': 1,
+            'line-width': 2
           }
         });
       } else {
@@ -92,13 +97,13 @@ const Map: React.FC<MapProps> = ({
 
         map.addSource('line', { type: 'geojson', data: updateData });
         map.addLayer({
-          'id': 'line',
-          'type': 'line',
-          'source': 'line',
-          'paint': {
-            'line-color': 'yellow',
+          id: 'line',
+          type: 'line',
+          source: 'line',
+          paint: {
+            'line-color': colors.blue[700],
             'line-opacity': 0.75,
-            'line-width': 5
+            'line-width': 2
           }
         });
       }
@@ -133,10 +138,11 @@ const Map: React.FC<MapProps> = ({
         type: "circle",
         source: `point ${coordinateList.length}`,
         paint: {
-          "circle-radius": 10,
-          "circle-color": "#3887be",
+          "circle-radius": 4,
+          "circle-color": colors.blue[700],
         },
       });
+
     }
   }, [coordinateList]);
 
